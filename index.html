@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
     <head>
+        <meta name="robots" content="noindex, nofollow">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Resume - Start Bootstrap Theme</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+        <!-- Aplica el tema guardado (o el del sistema) antes de pintar, para evitar parpadeos -->
+        <script>
+            try {
+                var savedTheme = localStorage.getItem('theme');
+                if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (e) {}
+        </script>
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
@@ -14,8 +23,96 @@
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <style>
+            /* ---------- Botones de idioma y tema ---------- */
+            .site-controls {
+                position: fixed;
+                top: 0.75rem;
+                left: 0.75rem;
+                z-index: 1050;
+                display: flex;
+                gap: 0.5rem;
+            }
+            .control-btn {
+                width: 2.5rem;
+                height: 2.5rem;
+                padding: 0;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                border: 2px solid rgba(255, 255, 255, 0.85);
+                background-color: rgba(255, 255, 255, 0.12);
+                color: #fff;
+                font-family: 'Saira Extra Condensed', sans-serif;
+                font-weight: 700;
+                font-size: 1.05rem;
+                letter-spacing: 0.03em;
+                line-height: 1;
+                cursor: pointer;
+                transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            }
+            .control-btn:hover {
+                background-color: #fff;
+                color: #bd5d38;
+                transform: translateY(-1px);
+            }
+            .control-btn:active { transform: translateY(0); }
+            .control-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+            .control-btn svg, .control-btn i { font-size: 1rem; }
+
+            /* Luna en tema claro (pulsar = pasar a oscuro), sol en tema oscuro */
+            .icon-sun { display: none; }
+            html[data-theme="dark"] .icon-moon { display: none; }
+            html[data-theme="dark"] .icon-sun { display: inline-block; }
+
+            @media (max-width: 991.98px) {
+                .site-controls { top: 0.7rem; gap: 0.4rem; }
+                .control-btn { width: 2.1rem; height: 2.1rem; font-size: 0.95rem; }
+                /* deja sitio a los botones junto al nombre en la barra superior */
+                #sideNav .navbar-brand { margin-left: 4.9rem; }
+            }
+
+            /* ---------- Tema oscuro ---------- */
+            html[data-theme="dark"] { color-scheme: dark; }
+            body, #sideNav, .social-icons .social-icon { transition: background-color 0.3s ease, color 0.3s ease; }
+            html[data-theme="dark"] body { background-color: #16181b; color: #adb5bd; }
+            html[data-theme="dark"] h1,
+            html[data-theme="dark"] h2,
+            html[data-theme="dark"] h3,
+            html[data-theme="dark"] h4,
+            html[data-theme="dark"] h5,
+            html[data-theme="dark"] h6 { color: #f1f3f5; }
+            html[data-theme="dark"] #sideNav.bg-primary { background-color: #8a3f22 !important; }
+            html[data-theme="dark"] .resume-section .text-primary { color: #e07a52 !important; }
+            html[data-theme="dark"] .resume-section-content a:not(.social-icon) { color: #e07a52; }
+            html[data-theme="dark"] .resume-section-content a:not(.social-icon):hover { color: #f0a283; }
+            html[data-theme="dark"] .social-icons .social-icon { background-color: #2f343a; color: #e9ecef; }
+            html[data-theme="dark"] .social-icons .social-icon:hover { background-color: #bd5d38; }
+            html[data-theme="dark"] hr { color: #fff; opacity: 0.12; }
+            /* ---------- Rastro del cursor ---------- */
+            #cursorTrail {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none; /* no interfiere con clics ni selección */
+                z-index: 1045; /* sobre la barra lateral, bajo los botones de idioma/tema */
+            }
+        </style>
     </head>
     <body id="page-top">
+        <!-- Rastro del cursor-->
+        <canvas id="cursorTrail" aria-hidden="true"></canvas>
+        <!-- Language & theme controls-->
+        <div class="site-controls" role="group" aria-label="Preferencias de la página">
+            <button type="button" class="control-btn" id="langToggle"><span id="langLabel">EN</span></button>
+            <button type="button" class="control-btn" id="themeToggle">
+                <i class="fas fa-moon icon-moon"></i>
+                <i class="fas fa-sun icon-sun"></i>
+            </button>
+        </div>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">
@@ -25,10 +122,10 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">Sobre mí</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Educación</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Habilidades</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#interests">Intereses</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about" data-i18n="nav_about">Sobre mí</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education" data-i18n="nav_education">Educación</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills" data-i18n="nav_skills">Habilidades</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#interests" data-i18n="nav_interests">Intereses</a></li>
                 </ul>
             </div>
         </nav>
@@ -41,36 +138,30 @@
                         Diego
                         <span class="text-primary">Martínez Martínez</span>
                     </h1>
-                    <div class="subheading mb-5">
-                        Madrid, Spain 28280 
-                        <a href="mailto:diego.martinez32@educa.madrid.org">diego.martinez32@educa.madrid.org</a>
-                    </div>
-                    <p class="lead mb-5">Estoy especializado en el desarrollo de aplicaciones multiplataforma y la creación de experiencias de usuario innovadoras.</p>
-                    <div class="social-icons">
-                        <a class="social-icon" href="https://www.linkedin.com/in/diego-mart%C3%ADnez-mart%C3%ADnez-8abba4283/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="social-icon" href="https://github.com/diegomm1" target="_blank"><i class="fab fa-github"></i></a>
-                    </div>
+                    
+                    <p class="lead mb-5" data-i18n="about_lead">Estoy especializado en el desarrollo de aplicaciones multiplataforma y la creación de experiencias de usuario innovadoras.</p>
+                    
                 </div>
             </section>
             <hr class="m-0" />
             <!-- Education-->
             <section class="resume-section" id="education">
                 <div class="resume-section-content">
-                    <h2 class="mb-5">Education</h2>
+                    <h2 class="mb-5" data-i18n="edu_title">Educación</h2>
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                         <div class="flex-grow-1">
-                            <h3 class="mb-0">IES El Escorial</h3>
-                            <div class="subheading mb-3">E.S.O. y Bachillerato</div>
+                            <h3 class="mb-0">Joseo School</h3>
+                            <div class="subheading mb-3" data-i18n="edu1_degree">Máster en joseo</div>
                         </div>
-                        <div class="flex-shrink-0"><span class="text-primary">Septiembre 2020 - Junio 2026  </span></div>
+                        <div class="flex-shrink-0"><span class="text-primary" data-i18n="edu1_dates">Septiembre 2020 - Junio 2026</span></div>
                     </div>
                     <div class="d-flex flex-column flex-md-row justify-content-between">
                         <div class="flex-grow-1">
-                            <h3 class="mb-0">IES Infanta Elena</h3>
-                            <div class="subheading mb-3">F.P. en Desarrollo de Aplicaciones Multiplataforma</div>
+                            <h3 class="mb-0">Joseo School</h3>
+                            <div class="subheading mb-3" data-i18n="edu2_degree">Máster avanzado en joseo</div>
                             <p></p>
                         </div>
-                        <div class="flex-shrink-0"><span class="text-primary">Septiembre 2026 - Junio 2027</span></div>
+                        <div class="flex-shrink-0"><span class="text-primary" data-i18n="edu2_dates">Septiembre 2026 - Junio 2027</span></div>
                     </div>
                 </div>
             </section>
@@ -78,8 +169,8 @@
             <!-- Skills-->
             <section class="resume-section" id="skills">
                 <div class="resume-section-content">
-                    <h2 class="mb-5">Habilidades</h2>
-                    <div class="subheading mb-3">Lenguajes de Programación y Herramientas</div>
+                    <h2 class="mb-5" data-i18n="skills_title">Habilidades</h2>
+                    <div class="subheading mb-3" data-i18n="skills_langs">Lenguajes de Programación y Herramientas</div>
                     <ul class="list-inline dev-icons">
                         <li class="list-inline-item"><i class="fab fa-html5"></i></li>
                         <li class="list-inline-item"><i class="fab fa-css3-alt"></i></li>
@@ -94,23 +185,23 @@
                         <li class="list-inline-item"><i class="fab fa-grunt"></i></li>
                         <li class="list-inline-item"><i class="fab fa-npm"></i></li>
                     </ul>
-                    <div class="subheading mb-3">Workflow</div>
+                    <div class="subheading mb-3" data-i18n="skills_workflow">Metodología de trabajo</div>
                     <ul class="fa-ul mb-0">
                         <li>
                             <span class="fa-li"><i class="fas fa-check"></i></span>
-                            Mobile-First, Responsive Design
+                            <span data-i18n="wf1">Diseño responsive Mobile-First</span>
                         </li>
                         <li>
                             <span class="fa-li"><i class="fas fa-check"></i></span>
-                            Cross Browser Testing & Debugging
+                            <span data-i18n="wf2">Pruebas y depuración en distintos navegadores</span>
                         </li>
                         <li>
                             <span class="fa-li"><i class="fas fa-check"></i></span>
-                            Cross Functional Teams
+                            <span data-i18n="wf3">Equipos multidisciplinares</span>
                         </li>
                         <li>
                             <span class="fa-li"><i class="fas fa-check"></i></span>
-                            Agile Development & Scrum
+                            <span data-i18n="wf4">Desarrollo ágil y Scrum</span>
                         </li>
                     </ul>
                 </div>
@@ -119,15 +210,185 @@
             <!-- Interests-->
             <section class="resume-section" id="interests">
                 <div class="resume-section-content">
-                    <h2 class="mb-5">Intereses</h2>
-                    <p>Aparte de ser un desarrollador multiplataforma, disfruto pasar la mayor parte de mi tiempo al aire libre. En el invierno, soy un apasionado jugador de baloncesto. Durante las estaciones más cálidas aquí en Madrid, disfruto de la bicicleta de montaña, el baloncesto y el senderismo de montaña.</p>
-                    <p class="mb-0">Cuando no estoy al aire libre, me gusta jugar videojuegos, y también soy un aspirante a chef, me encanta la cocina.</p>
+                    <h2 class="mb-5" data-i18n="int_title">Intereses</h2>
+                    <p data-i18n="int_p1">Aparte de ser un desarrollador multiplataforma, disfruto pasar la mayor parte de mi tiempo al aire libre. En el invierno, soy un apasionado jugador de baloncesto. Durante las estaciones más cálidas aquí en Madrid, disfruto de la bicicleta de montaña, el baloncesto y el senderismo de montaña.</p>
+                    <p class="mb-0" data-i18n="int_p2">Cuando no estoy al aire libre, me gusta jugar videojuegos, y también soy un aspirante a chef, me encanta la cocina.</p>
                 </div>
             </section>
             <hr class="m-0" />
+        </div>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <!-- Language & theme logic-->
+        <script>
+            (function () {
+                var translations = {
+                    es: {
+                        nav_about: 'Sobre mí',
+                        nav_education: 'Educación',
+                        nav_skills: 'Habilidades',
+                        nav_interests: 'Intereses',
+                        about_lead: 'Estoy especializado en el desarrollo de aplicaciones multiplataforma y la creación de experiencias de usuario innovadoras.',
+                        edu_title: 'Educación',
+                        edu1_degree: 'Máster en joseo',
+                        edu1_dates: 'Septiembre 2020 - Junio 2026',
+                        edu2_degree: 'Máster avanzado en joseo y dedeo de panchas',
+                        edu2_dates: 'Septiembre 2026 - Junio 2027',
+                        skills_title: 'Habilidades',
+                        skills_langs: 'Lenguajes de Programación y Herramientas',
+                        skills_workflow: 'Metodología de trabajo',
+                        wf1: 'Diseño responsive Mobile-First',
+                        wf2: 'Pruebas y depuración en distintos navegadores',
+                        wf3: 'Equipos multidisciplinares',
+                        wf4: 'Desarrollo ágil y Scrum',
+                        int_title: 'Intereses',
+                        int_p1: 'Aparte de ser un desarrollador multiplataforma, disfruto pasar la mayor parte de mi tiempo al aire libre. En el invierno, soy un apasionado jugador de baloncesto. Durante las estaciones más cálidas aquí en Madrid, disfruto de la bicicleta de montaña, el baloncesto y el senderismo de montaña.',
+                        int_p2: 'Cuando no estoy al aire libre, me gusta jugar videojuegos, y también soy un aspirante a chef, me encanta la cocina.',
+                        lang_btn: 'EN',
+                        lang_aria: 'Cambiar el idioma a inglés',
+                        theme_to_dark: 'Activar tema oscuro',
+                        theme_to_light: 'Activar tema claro',
+                        controls_aria: 'Preferencias de la página'
+                    },
+                    en: {
+                        nav_about: 'About',
+                        nav_education: 'Education',
+                        nav_skills: 'Skills',
+                        nav_interests: 'Interests',
+                        about_lead: 'I specialize in cross-platform application development and in creating innovative user experiences.',
+                        edu_title: 'Education',
+                        edu1_degree: "Master's in joseo",
+                        edu1_dates: 'September 2020 - June 2026',
+                        edu2_degree: "Advanced master's in joseo",
+                        edu2_dates: 'September 2026 - June 2027',
+                        skills_title: 'Skills',
+                        skills_langs: 'Programming Languages & Tools',
+                        skills_workflow: 'Workflow',
+                        wf1: 'Mobile-First, Responsive Design',
+                        wf2: 'Cross Browser Testing & Debugging',
+                        wf3: 'Cross Functional Teams',
+                        wf4: 'Agile Development & Scrum',
+                        int_title: 'Interests',
+                        int_p1: "Besides being a cross-platform developer, I enjoy spending most of my time outdoors. In winter, I'm a passionate basketball player. During the warmer seasons here in Madrid, I enjoy mountain biking, basketball and mountain hiking.",
+                        int_p2: "When I'm not outdoors, I like playing video games, and I'm also an aspiring chef — I love cooking.",
+                        lang_btn: 'ES',
+                        lang_aria: 'Switch language to Spanish',
+                        theme_to_dark: 'Switch to dark theme',
+                        theme_to_light: 'Switch to light theme',
+                        controls_aria: 'Page preferences'
+                    }
+                };
+
+                var root = document.documentElement;
+                var langBtn = document.getElementById('langToggle');
+                var langLabel = document.getElementById('langLabel');
+                var themeBtn = document.getElementById('themeToggle');
+                var controls = document.querySelector('.site-controls');
+
+                function store(key, value) {
+                    try { localStorage.setItem(key, value); } catch (e) {}
+                }
+                function read(key) {
+                    try { return localStorage.getItem(key); } catch (e) { return null; }
+                }
+
+                function setLanguage(lang) {
+                    var dict = translations[lang];
+                    root.setAttribute('lang', lang);
+                    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+                        var value = dict[el.getAttribute('data-i18n')];
+                        if (value !== undefined) el.textContent = value;
+                    });
+                    langLabel.textContent = dict.lang_btn;
+                    langBtn.setAttribute('aria-label', dict.lang_aria);
+                    langBtn.setAttribute('title', dict.lang_aria);
+                    controls.setAttribute('aria-label', dict.controls_aria);
+                    store('lang', lang);
+                    updateThemeButton();
+                }
+
+                function updateThemeButton() {
+                    var dict = translations[root.getAttribute('lang')] || translations.es;
+                    var isDark = root.getAttribute('data-theme') === 'dark';
+                    var label = isDark ? dict.theme_to_light : dict.theme_to_dark;
+                    themeBtn.setAttribute('aria-label', label);
+                    themeBtn.setAttribute('title', label);
+                }
+
+                function setTheme(theme) {
+                    root.setAttribute('data-theme', theme);
+                    store('theme', theme);
+                    updateThemeButton();
+                }
+
+                langBtn.addEventListener('click', function () {
+                    setLanguage(root.getAttribute('lang') === 'es' ? 'en' : 'es');
+                });
+                themeBtn.addEventListener('click', function () {
+                    setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+                });
+
+                // Estado inicial: idioma guardado (por defecto español)
+                setLanguage(read('lang') === 'en' ? 'en' : 'es');
+            })();
+        </script>
+        <!-- Cursor trail: el color es el opuesto al del tema (oscuro sobre claro, claro sobre oscuro)-->
+        <script>
+            (function () {
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+                var canvas = document.getElementById('cursorTrail');
+                var ctx = canvas.getContext('2d');
+                var root = document.documentElement;
+                var LIFE = 700;      // ms que tarda en desvanecerse el rastro
+                var MAX_WIDTH = 10;  // grosor máximo (junto al cursor)
+                var MIN_WIDTH = 1.5; // grosor mínimo (cola del rastro)
+                var COLORS = { light: '22, 24, 27', dark: '241, 243, 245' }; // RGB: casi negro / casi blanco
+                var points = [];
+                var running = false;
+                var startNext = true;
+
+                function resize() {
+                    var dpr = window.devicePixelRatio || 1;
+                    canvas.width = Math.round(window.innerWidth * dpr);
+                    canvas.height = Math.round(window.innerHeight * dpr);
+                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                }
+
+                function draw(now) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    while (points.length && now - points[0].t > LIFE) points.shift();
+                    if (!points.length) { running = false; return; }
+
+                    // opuesto al tema actual: si el tema es claro, rastro oscuro; si es oscuro, rastro claro
+                    var rgb = root.getAttribute('data-theme') === 'dark' ? COLORS.dark : COLORS.light;
+                    ctx.lineCap = 'round';
+                    for (var i = 1; i < points.length; i++) {
+                        var a = points[i - 1], b = points[i];
+                        if (b.start) continue; // no unir con puntos de otra entrada del cursor
+                        var k = 1 - (now - b.t) / LIFE; // 1 = recién dibujado, 0 = desvanecido
+                        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.9 * k).toFixed(3) + ')';
+                        ctx.lineWidth = MIN_WIDTH + (MAX_WIDTH - MIN_WIDTH) * k;
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.stroke();
+                    }
+                    requestAnimationFrame(draw);
+                }
+
+                window.addEventListener('pointermove', function (e) {
+                    if (e.pointerType === 'touch') return;
+                    points.push({ x: e.clientX, y: e.clientY, t: performance.now(), start: startNext });
+                    startNext = false;
+                    if (!running) { running = true; requestAnimationFrame(draw); }
+                }, { passive: true });
+                document.documentElement.addEventListener('pointerleave', function () { startNext = true; });
+                window.addEventListener('resize', resize);
+                resize();
+            })();
+        </script>
     </body>
 </html>
