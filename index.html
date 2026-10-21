@@ -36,6 +36,18 @@
                 gap: 0.5rem;
                 align-items: center;
             }
+            .language-status {
+                position: absolute;
+                top: calc(100% + 0.35rem);
+                left: 0;
+                max-width: min(20rem, calc(100vw - 1.5rem));
+                padding: 0.4rem 0.65rem;
+                border-radius: 0.4rem;
+                background: #fff;
+                color: #212529;
+                font: 400 0.8rem/1.35 'Muli', sans-serif;
+                box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+            }
             .control-select {
                 height: 2.5rem;
                 padding: 0 0.75rem;
@@ -140,7 +152,7 @@
                 <option value="cs">Čeština (CS)</option>
                 <option value="sv">Svenska (SV)</option>
                 <option value="hu">Magyar (HU)</option>
-                <option value="be">Belarussian (BE)</option>
+                <option value="be">Belarusian (BE)</option>
                 <option value="bg">Български (BG)</option>
                 <option value="da">Dansk (DA)</option>
                 <option value="fi">Suomi (FI)</option>
@@ -163,11 +175,13 @@
                 <option value="gl">Galego (GL)</option>
                 <option value="cy">Cymraeg (CY)</option>
             </select>
+            <span id="languageStatus" class="language-status" role="status" aria-live="polite" hidden></span>
             <button type="button" class="control-btn" id="themeToggle" aria-label="Cambiar tema">
                 <i class="fas fa-moon icon-moon"></i>
                 <i class="fas fa-sun icon-sun"></i>
             </button>
         </div>
+        <div id="google_translate_element" hidden></div>
 
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
@@ -323,12 +337,63 @@
                 var root = document.documentElement;
                 var langSelect = document.getElementById('langSelect');
                 var themeBtn = document.getElementById('themeToggle');
+                var languageStatus = document.getElementById('languageStatus');
+                var translatorReady = false;
+                var translatorLoadFailed = false;
+                var translationRequestId = 0;
 
                 function store(key, value) {
                     try { localStorage.setItem(key, value); } catch (e) {}
                 }
                 function read(key) {
                     try { return localStorage.getItem(key); } catch (e) { return null; }
+                }
+                function showTranslationError() {
+                    languageStatus.textContent = 'No se pudo cargar la traducción. Comprueba tu conexión e inténtalo de nuevo.';
+                    languageStatus.hidden = false;
+                }
+                function requestTranslation(language) {
+                    var requestId = ++translationRequestId;
+                    if (translatorLoadFailed) {
+                        showTranslationError();
+                        return;
+                    }
+                    if (!translatorReady) return;
+
+                    var attempts = 0;
+                    function applyTranslation() {
+                        if (requestId !== translationRequestId) return;
+                        var translatorSelect = document.querySelector('.goog-te-combo');
+                        if (translatorSelect) {
+                            function dispatchLanguage(select, value) {
+                                select.value = value;
+                                select.dispatchEvent(new Event('change', { bubbles: true }));
+                                root.setAttribute('lang', language);
+                            }
+                            if (language === 'es') {
+                                dispatchLanguage(translatorSelect, language);
+                            } else {
+                                dispatchLanguage(translatorSelect, '');
+                                window.setTimeout(function () {
+                                    if (requestId !== translationRequestId) return;
+                                    var refreshedSelect = document.querySelector('.goog-te-combo');
+                                    if (refreshedSelect) {
+                                        dispatchLanguage(refreshedSelect, language);
+                                    } else {
+                                        showTranslationError();
+                                    }
+                                }, 2500);
+                            }
+                            languageStatus.hidden = true;
+                            return;
+                        }
+                        if (++attempts >= 100) {
+                            showTranslationError();
+                            return;
+                        }
+                        window.setTimeout(applyTranslation, 100);
+                    }
+                    applyTranslation();
                 }
 
                 // Manejo de Selección de Idiomas
@@ -337,10 +402,33 @@
                         var selectedLang = langSelect.value;
                         root.setAttribute('lang', selectedLang);
                         store('lang', selectedLang);
+                        languageStatus.hidden = true;
+                        requestTranslation(selectedLang);
                     });
                     var savedLang = read('lang') || 'es';
-                    langSelect.value = savedLang;
-                    root.setAttribute('lang', savedLang);
+                    var hasSavedLang = Array.prototype.some.call(langSelect.options, function (option) {
+                        return option.value === savedLang;
+                    });
+                    var initialLang = hasSavedLang ? savedLang : 'es';
+                    langSelect.value = initialLang;
+                    root.setAttribute('lang', initialLang);
+                    window.googleTranslateElementInit = function () {
+                        new google.translate.TranslateElement({
+                            pageLanguage: 'es',
+                            includedLanguages: Array.prototype.map.call(langSelect.options, function (option) {
+                                return option.value;
+                            }).join(','),
+                            autoDisplay: false
+                        }, 'google_translate_element');
+                        window.setTimeout(function () {
+                            translatorReady = true;
+                            requestTranslation(langSelect.value);
+                        }, 1000);
+                    };
+                    window.googleTranslateLoadFailed = function () {
+                        translatorLoadFailed = true;
+                        if (langSelect.value !== 'es') showTranslationError();
+                    };
                 }
 
                 // Manejo de Tema Claro / Oscuro
@@ -361,6 +449,7 @@
                 setTheme(savedTheme);
             })();
         </script>
+        <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" onerror="googleTranslateLoadFailed()"></script>
 
         <!-- Cursor Trail Script -->
         <script>
