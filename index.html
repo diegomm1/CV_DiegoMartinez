@@ -1,512 +1,68 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-    <head>
-        <meta name="robots" content="noindex, nofollow">
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="Portfolio de Diego Martínez - Desarrollador de Software Multiplataforma" />
-        <meta name="robots" content="noindex, nofollow">
-        <title>Diego Martínez - Portfolio</title>
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
-        
-        <!-- Script para evitar parpadeo de tema -->
-        <script>
-            try {
-                var savedTheme = localStorage.getItem('theme');
-                if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', savedTheme);
-            } catch (e) {}
-        </script>
-        
-        <!-- Font Awesome -->
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <!-- Google fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
-        <!-- Core theme CSS -->
-        <link href="css/styles.css" rel="stylesheet" />
-        
-        <style>
-            /* ---------- Botones de idioma y tema ---------- */
-            .site-controls {
-                position: fixed;
-                top: 0.75rem;
-                left: 0.75rem;
-                z-index: 1050;
-                display: flex;
-                gap: 0.5rem;
-                align-items: center;
-            }
-            .language-status {
-                position: absolute;
-                top: calc(100% + 0.35rem);
-                left: 0;
-                max-width: min(20rem, calc(100vw - 1.5rem));
-                padding: 0.4rem 0.65rem;
-                border-radius: 0.4rem;
-                background: #fff;
-                color: #212529;
-                font: 400 0.8rem/1.35 'Muli', sans-serif;
-                box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
-            }
-            .control-select {
-                height: 2.5rem;
-                padding: 0 0.75rem;
-                border-radius: 1.25rem;
-                border: 2px solid rgba(255, 255, 255, 0.85);
-                background-color: rgba(255, 255, 255, 0.2);
-                color: #fff;
-                font-family: 'Saira Extra Condensed', sans-serif;
-                font-weight: 700;
-                font-size: 0.95rem;
-                cursor: pointer;
-                outline: none;
-                transition: background-color 0.2s ease, color 0.2s ease;
-            }
-            .control-select option {
-                background-color: #212529;
-                color: #fff;
-            }
-            .control-btn {
-                width: 2.5rem;
-                height: 2.5rem;
-                padding: 0;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                border: 2px solid rgba(255, 255, 255, 0.85);
-                background-color: rgba(255, 255, 255, 0.12);
-                color: #fff;
-                font-family: 'Saira Extra Condensed', sans-serif;
-                font-weight: 700;
-                font-size: 1.05rem;
-                cursor: pointer;
-                transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-            }
-            .control-btn:hover, .control-select:hover {
-                background-color: #fff;
-                color: #bd5d38;
-            }
-
-            /* Iconos del tema */
-            .icon-sun { display: none; }
-            html[data-theme="dark"] .icon-moon { display: none; }
-            html[data-theme="dark"] .icon-sun { display: inline-block; }
-
-            @media (max-width: 991.98px) {
-                .site-controls { top: 0.7rem; gap: 0.4rem; }
-                .control-btn, .control-select { height: 2.1rem; font-size: 0.85rem; }
-                #sideNav .navbar-brand { margin-left: 9rem; }
-            }
-
-            /* ---------- Estilos compactos y Modo Oscuro ---------- */
-            .resume-section {
-                padding-top: 2.5rem !important;
-                padding-bottom: 2.5rem !important;
-            }
-            @media (min-width: 992px) {
-                .resume-section { min-height: auto !important; }
-            }
-
-            html[data-theme="dark"] { color-scheme: dark; }
-            html[data-theme="dark"] body { background-color: #16181b; color: #adb5bd; }
-            html[data-theme="dark"] h1,
-            html[data-theme="dark"] h2,
-            html[data-theme="dark"] h3,
-            html[data-theme="dark"] h4 { color: #f1f3f5; }
-            html[data-theme="dark"] #sideNav.bg-primary { background-color: #8a3f22 !important; }
-            html[data-theme="dark"] .resume-section .text-primary { color: #e07a52 !important; }
-            html[data-theme="dark"] .resume-section-content a { color: #e07a52; }
-            html[data-theme="dark"] .social-icons .social-icon { background-color: #2f343a; color: #e9ecef; }
-            html[data-theme="dark"] .social-icons .social-icon:hover { background-color: #bd5d38; }
-            html[data-theme="dark"] hr { color: #fff; opacity: 0.12; }
-
-            #cursorTrail {
-                position: fixed;
-                top: 0; left: 0;
-                width: 100%; height: 100%;
-                pointer-events: none;
-                z-index: 1045;
-            }
-        </style>
-    </head>
-    <body id="page-top">
-        <!-- Rastro del cursor -->
-        <canvas id="cursorTrail" aria-hidden="true"></canvas>
-
-        <!-- Controles de idioma y tema -->
-        <div class="site-controls" role="group" aria-label="Preferencias de la página">
-            <select id="langSelect" class="control-select" aria-label="Seleccionar idioma">
-                <option value="es" selected>Español (ES)</option>
-                <option value="en">English (EN)</option>
-                <option value="fr">Français (FR)</option>
-                <option value="de">Deutsch (DE)</option>
-                <option value="it">Italiano (IT)</option>
-                <option value="pt">Português (PT)</option>
-                <option value="nl">Nederlands (NL)</option>
-                <option value="ru">Русский (RU)</option>
-                <option value="pl">Polski (PL)</option>
-                <option value="uk">Українська (UK)</option>
-                <option value="ro">Română (RO)</option>
-                <option value="el">Ελληνικά (EL)</option>
-                <option value="cs">Čeština (CS)</option>
-                <option value="sv">Svenska (SV)</option>
-                <option value="hu">Magyar (HU)</option>
-                <option value="be">Belarusian (BE)</option>
-                <option value="bg">Български (BG)</option>
-                <option value="da">Dansk (DA)</option>
-                <option value="fi">Suomi (FI)</option>
-                <option value="sk">Slovenčina (SK)</option>
-                <option value="no">Norsk (NO)</option>
-                <option value="hr">Hrvatski (HR)</option>
-                <option value="sr">Српски (SR)</option>
-                <option value="bs">Bosanski (BS)</option>
-                <option value="sq">Shqip (SQ)</option>
-                <option value="lt">Lietuvių (LT)</option>
-                <option value="lv">Latviešu (LV)</option>
-                <option value="et">Eesti (ET)</option>
-                <option value="sl">Slovenščina (SL)</option>
-                <option value="mk">Makedonski (MK)</option>
-                <option value="ga">Gaeilge (GA)</option>
-                <option value="is">Íslenska (IS)</option>
-                <option value="mt">Malti (MT)</option>
-                <option value="eu">Euskara (EU)</option>
-                <option value="ca">Català (CA)</option>
-                <option value="gl">Galego (GL)</option>
-                <option value="cy">Cymraeg (CY)</option>
-            </select>
-            <span id="languageStatus" class="language-status" role="status" aria-live="polite" hidden></span>
-            <button type="button" class="control-btn" id="themeToggle" aria-label="Cambiar tema">
-                <i class="fas fa-moon icon-moon"></i>
-                <i class="fas fa-sun icon-sun"></i>
-            </button>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Portfolio de Diego Martínez - Desarrollador de Software Multiplataforma" />
+    <title data-es="Sobre mí | Diego Martínez" data-en="About me | Diego Martínez">Sobre mí | Diego Martínez</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('theme');
+            if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (e) {}
+    </script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="site-controls" role="group" aria-label="Preferencias de la página">
+        <label class="visually-hidden" for="langSelect" data-es="Idioma" data-en="Language">Idioma</label>
+        <select id="langSelect" class="control-select" aria-label="Idioma">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+        </select>
+        <button type="button" class="control-btn" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema">
+            <i class="fas fa-moon icon-moon" aria-hidden="true"></i>
+            <i class="fas fa-sun icon-sun" aria-hidden="true"></i>
+        </button>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+        <a class="navbar-brand" href="index.html">
+            <span class="d-block d-lg-none">Diego Martínez</span>
+            <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="assets/img/profile.jpg" alt="Diego Martínez" /></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Abrir navegación"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" href="index.html" aria-current="page"><span data-es="Sobre mí" data-en="About me">Sobre mí</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="experience.html"><span data-es="Experiencia" data-en="Experience">Experiencia</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="education.html"><span data-es="Educación" data-en="Education">Educación</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="projects.html"><span data-es="Proyectos" data-en="Projects">Proyectos</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="skills.html"><span data-es="Habilidades" data-en="Skills">Habilidades</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="interests.html"><span data-es="Intereses" data-en="Interests">Intereses</span></a></li>
+            </ul>
         </div>
-        <div id="google_translate_element" hidden></div>
-
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">
-                <span class="d-block d-lg-none">Diego Martínez</span>
-                <span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="assets/img/profile.jpg" alt="Diego Martínez" /></span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">Sobre mí</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#experience">Experiencia</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Educación</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#projects">Proyectos</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Habilidades</a></li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#interests">Intereses</a></li>
-                </ul>
+    </nav>
+    <main class="container-fluid p-0">
+        <section class="resume-section">
+            <div class="resume-section-content">
+                <h1 class="mb-0">Diego <span class="text-primary">Martínez</span></h1>
+                <div class="subheading mb-3">
+                    <span data-es="Desarrollador de Software Multiplataforma" data-en="Multiplatform Software Developer">Desarrollador de Software Multiplataforma</span> ·
+                    <a href="https://github.com/diegomm1" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> github.com/diegomm1</a>
+                </div>
+                <p class="lead mb-4" data-es="Me apasiona la programación y el desarrollo de software multiplataforma. En mi tiempo libre me gusta jugar al baloncesto y cocinar nuevas recetas." data-en="I am passionate about programming and multiplatform software development. In my free time, I enjoy playing basketball and trying new recipes.">Me apasiona la programación y el desarrollo de software multiplataforma. En mi tiempo libre me gusta jugar al baloncesto y cocinar nuevas recetas.</p>
+                <div class="social-icons mb-2">
+                    <a class="social-icon" href="https://github.com/diegomm1" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+                </div>
             </div>
-        </nav>
-
-        <!-- Page Content -->
-        <div class="container-fluid p-0">
-            <!-- About -->
-            <section class="resume-section" id="about">
-                <div class="resume-section-content">
-                    <h1 class="mb-0">
-                        Diego
-                        <span class="text-primary">Martínez</span>
-                    </h1>
-                    <div class="subheading mb-3">
-                        Desarrollador de Software Multiplataforma · 
-                        <a href="https://github.com/diegomm1" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> github.com/diegomm1</a>
-                    </div>
-                    <p class="lead mb-4">Me apasiona la programación y el desarrollo de software multiplataforma. En mi tiempo libre me gusta jugar al baloncesto y cocinar nuevas recetas.</p>
-                    <div class="social-icons mb-2">
-                        <a class="social-icon" href="https://github.com/diegomm1" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-
-            <!-- Experience -->
-            <section class="resume-section" id="experience">
-                <div class="resume-section-content">
-                    <h2 class="mb-4">Experiencia de Trabajo</h2>
-                    <div class="d-flex flex-column flex-md-row justify-content-between mb-4">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">Desarrollador de Software Multiplataforma</h3>
-                            <div class="subheading mb-2">Innovatech Solutions</div>
-                            <p>Desarrollo y mantenimiento de aplicaciones móviles nativas y multiplataforma con Flutter y Kotlin. Integración de APIs RESTful y optimización de bases de datos PostgreSQL.</p>
-                        </div>
-                        <div class="flex-shrink-0"><span class="text-primary">Julio 2023 - Presente</span></div>
-                    </div>
-                    <div class="d-flex flex-column flex-md-row justify-content-between">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">Desarrollador Junior Frontend</h3>
-                            <div class="subheading mb-2">CodeCraft Studios</div>
-                            <p>Maquetación web responsive, desarrollo frontend con JavaScript/React y pruebas comunitarias de depuración cross-browser.</p>
-                        </div>
-                        <div class="flex-shrink-0"><span class="text-primary">Enero 2023 - Junio 2023</span></div>
-                    </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-
-            <!-- Education -->
-            <section class="resume-section" id="education">
-                <div class="resume-section-content">
-                    <h2 class="mb-4">Educación</h2>
-                    <div class="d-flex flex-column flex-md-row justify-content-between mb-4">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">IES Tecnológico de Madrid</h3>
-                            <div class="subheading mb-1">Técnico Superior en Desarrollo de Aplicaciones Multiplataforma (DAM)</div>
-                            <p>Especialización en entornos móviles, bases de datos relacionales/NoSQL y programación orientada a objetos.</p>
-                        </div>
-                        <div class="flex-shrink-0"><span class="text-primary">Septiembre 2021 - Junio 2023</span></div>
-                    </div>
-                    <div class="d-flex flex-column flex-md-row justify-content-between">
-                        <div class="flex-grow-1">
-                            <h3 class="mb-0">Universidad Politécnica de Madrid</h3>
-                            <div class="subheading mb-1">Grado en Ingeniería del Software</div>
-                            <p>Ciclo de vida del software, arquitectura de sistemas, estructuras de datos y algoritmos.</p>
-                        </div>
-                        <div class="flex-shrink-0"><span class="text-primary">Septiembre 2017 - Junio 2021</span></div>
-                    </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-
-            <!-- Projects -->
-            <section class="resume-section" id="projects">
-                <div class="resume-section-content">
-                    <h2 class="mb-4">Proyectos</h2>
-                    <div class="mb-4">
-                        <h3 class="mb-1">BasketStat Tracker</h3>
-                        <p class="mb-1">Aplicación móvil para registrar estadísticas en tiempo real durante partidos de baloncesto (Flutter & Firebase).</p>
-                    </div>
-                    <div class="mb-4">
-                        <h3 class="mb-1">ChefBook</h3>
-                        <p class="mb-1">Plataforma web y móvil para organizar recetas personales, planificar menús semanales y generar listas de compras (React & Node.js).</p>
-                    </div>
-                    <div>
-                        <h3 class="mb-1">Portfolio & Microservicios Open-Source</h3>
-                        <p class="mb-0">Repositorio con proyectos personales y utilidades publicadas abiertamente en <a href="https://github.com/diegomm1" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
-                    </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-
-            <!-- Skills -->
-            <section class="resume-section" id="skills">
-                <div class="resume-section-content">
-                    <h2 class="mb-4">Experiencia Técnica</h2>
-                    <div class="subheading mb-3">Lenguajes de Programación y Herramientas</div>
-                    <ul class="list-inline dev-icons mb-4">
-                        <li class="list-inline-item"><i class="fab fa-java"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-js"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-react"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-node-js"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-git-alt"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-docker"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-html5"></i></li>
-                        <li class="list-inline-item"><i class="fab fa-css3-alt"></i></li>
-                    </ul>
-                    <div class="subheading mb-3">Metodologías & Prácticas</div>
-                    <ul class="fa-ul mb-0">
-                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Desarrollo móvil Mobile-First y Clean Architecture</li>
-                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Integración y despliegue continuo (CI/CD)</li>
-                        <li><span class="fa-li"><i class="fas fa-check"></i></span>Metodologías ágiles (Scrum / Kanban)</li>
-                    </ul>
-                </div>
-            </section>
-            <hr class="m-0" />
-
-            <!-- Interests -->
-            <section class="resume-section" id="interests">
-                <div class="resume-section-content">
-                    <h2 class="mb-4">Intereses</h2>
-                    <p>Me apasiona el <strong>baloncesto</strong>, deporte que practico activamente en ligas locales para mantenerme en forma y cultivar el trabajo en equipo.</p>
-                    <p class="mb-0">En mi tiempo libre me encanta la <strong>cocina</strong>, probando nuevas recetas de gastronomía internacional y repostería artesanal, así como explorar nuevas tecnologías y colaborar en proyectos de <strong>programación</strong> open-source.</p>
-                </div>
-            </section>
-            <hr class="m-0" />
-        </div>
-
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/scripts.js"></script>
-
-        <!-- Lógica de Controles de Idioma y Modo Oscuro -->
-        <script>
-            (function () {
-                var root = document.documentElement;
-                var langSelect = document.getElementById('langSelect');
-                var themeBtn = document.getElementById('themeToggle');
-                var languageStatus = document.getElementById('languageStatus');
-                var translatorReady = false;
-                var translatorLoadFailed = false;
-                var translationRequestId = 0;
-
-                function store(key, value) {
-                    try { localStorage.setItem(key, value); } catch (e) {}
-                }
-                function read(key) {
-                    try { return localStorage.getItem(key); } catch (e) { return null; }
-                }
-                function showTranslationError() {
-                    languageStatus.textContent = 'No se pudo cargar la traducción. Comprueba tu conexión e inténtalo de nuevo.';
-                    languageStatus.hidden = false;
-                }
-                function requestTranslation(language) {
-                    var requestId = ++translationRequestId;
-                    if (translatorLoadFailed) {
-                        showTranslationError();
-                        return;
-                    }
-                    if (!translatorReady) return;
-
-                    var attempts = 0;
-                    function applyTranslation() {
-                        if (requestId !== translationRequestId) return;
-                        var translatorSelect = document.querySelector('.goog-te-combo');
-                        if (translatorSelect) {
-                            function dispatchLanguage(select, value) {
-                                select.value = value;
-                                select.dispatchEvent(new Event('change', { bubbles: true }));
-                                root.setAttribute('lang', language);
-                            }
-                            if (language === 'es') {
-                                dispatchLanguage(translatorSelect, language);
-                            } else {
-                                dispatchLanguage(translatorSelect, '');
-                                window.setTimeout(function () {
-                                    if (requestId !== translationRequestId) return;
-                                    var refreshedSelect = document.querySelector('.goog-te-combo');
-                                    if (refreshedSelect) {
-                                        dispatchLanguage(refreshedSelect, language);
-                                    } else {
-                                        showTranslationError();
-                                    }
-                                }, 2500);
-                            }
-                            languageStatus.hidden = true;
-                            return;
-                        }
-                        if (++attempts >= 100) {
-                            showTranslationError();
-                            return;
-                        }
-                        window.setTimeout(applyTranslation, 100);
-                    }
-                    applyTranslation();
-                }
-
-                // Manejo de Selección de Idiomas
-                if (langSelect) {
-                    langSelect.addEventListener('change', function () {
-                        var selectedLang = langSelect.value;
-                        root.setAttribute('lang', selectedLang);
-                        store('lang', selectedLang);
-                        languageStatus.hidden = true;
-                        requestTranslation(selectedLang);
-                    });
-                    var savedLang = read('lang') || 'es';
-                    var hasSavedLang = Array.prototype.some.call(langSelect.options, function (option) {
-                        return option.value === savedLang;
-                    });
-                    var initialLang = hasSavedLang ? savedLang : 'es';
-                    langSelect.value = initialLang;
-                    root.setAttribute('lang', initialLang);
-                    window.googleTranslateElementInit = function () {
-                        new google.translate.TranslateElement({
-                            pageLanguage: 'es',
-                            includedLanguages: Array.prototype.map.call(langSelect.options, function (option) {
-                                return option.value;
-                            }).join(','),
-                            autoDisplay: false
-                        }, 'google_translate_element');
-                        window.setTimeout(function () {
-                            translatorReady = true;
-                            requestTranslation(langSelect.value);
-                        }, 1000);
-                    };
-                    window.googleTranslateLoadFailed = function () {
-                        translatorLoadFailed = true;
-                        if (langSelect.value !== 'es') showTranslationError();
-                    };
-                }
-
-                // Manejo de Tema Claro / Oscuro
-                function setTheme(theme) {
-                    root.setAttribute('data-theme', theme);
-                    store('theme', theme);
-                }
-
-                if (themeBtn) {
-                    themeBtn.addEventListener('click', function () {
-                        var currentTheme = root.getAttribute('data-theme') || 'light';
-                        var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                        setTheme(newTheme);
-                    });
-                }
-
-                var savedTheme = read('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                setTheme(savedTheme);
-            })();
-        </script>
-        <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" onerror="googleTranslateLoadFailed()"></script>
-
-        <!-- Cursor Trail Script -->
-        <script>
-            (function () {
-                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-                var canvas = document.getElementById('cursorTrail');
-                if (!canvas) return;
-                var ctx = canvas.getContext('2d');
-                var root = document.documentElement;
-                var LIFE = 700;
-                var MAX_WIDTH = 10;
-                var MIN_WIDTH = 1.5;
-                var COLORS = { light: '22, 24, 27', dark: '241, 243, 245' };
-                var points = [];
-                var running = false;
-                var startNext = true;
-
-                function resize() {
-                    var dpr = window.devicePixelRatio || 1;
-                    canvas.width = Math.round(window.innerWidth * dpr);
-                    canvas.height = Math.round(window.innerHeight * dpr);
-                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-                }
-
-                function draw(now) {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    while (points.length && now - points[0].t > LIFE) points.shift();
-                    if (!points.length) { running = false; return; }
-
-                    var rgb = root.getAttribute('data-theme') === 'dark' ? COLORS.dark : COLORS.light;
-                    ctx.lineCap = 'round';
-                    for (var i = 1; i < points.length; i++) {
-                        var a = points[i - 1], b = points[i];
-                        if (b.start) continue;
-                        var k = 1 - (now - b.t) / LIFE;
-                        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.9 * k).toFixed(3) + ')';
-                        ctx.lineWidth = MIN_WIDTH + (MAX_WIDTH - MIN_WIDTH) * k;
-                        ctx.beginPath();
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                        ctx.stroke();
-                    }
-                    requestAnimationFrame(draw);
-                }
-
-                window.addEventListener('pointermove', function (e) {
-                    if (e.pointerType === 'touch') return;
-                    points.push({ x: e.clientX, y: e.clientY, t: performance.now(), start: startNext });
-                    startNext = false;
-                    if (!running) { running = true; requestAnimationFrame(draw); }
-                }, { passive: true });
-                document.documentElement.addEventListener('pointerleave', function () { startNext = true; });
-                window.addEventListener('resize', resize);
-                resize();
-            })();
-        </script>
-    </body>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
+</body>
 </html>

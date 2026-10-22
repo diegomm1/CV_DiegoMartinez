@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Proyectos de Diego Martínez" />
+    <title data-es="Proyectos | Diego Martínez" data-en="Projects | Diego Martínez">Proyectos | Diego Martínez</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <script>
+        try {
+            var savedTheme = localStorage.getItem('theme');
+            if (!savedTheme) savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (e) {}
+    </script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="site-controls" role="group" aria-label="Preferencias de la página">
+        <label class="visually-hidden" for="langSelect" data-es="Idioma" data-en="Language">Idioma</label>
+        <select id="langSelect" class="control-select" aria-label="Idioma"><option value="es">Español</option><option value="en">English</option></select>
+        <button type="button" class="control-btn" id="themeToggle" aria-label="Cambiar tema" title="Cambiar tema"><i class="fas fa-moon icon-moon" aria-hidden="true"></i><i class="fas fa-sun icon-sun" aria-hidden="true"></i></button>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+        <a class="navbar-brand" href="index.html"><span class="d-block d-lg-none">Diego Martínez</span><span class="d-none d-lg-block"><img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="assets/img/profile.jpg" alt="Diego Martínez" /></span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Abrir navegación"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive"><ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html"><span data-es="Sobre mí" data-en="About me">Sobre mí</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="experience.html"><span data-es="Experiencia" data-en="Experience">Experiencia</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="education.html"><span data-es="Educación" data-en="Education">Educación</span></a></li>
+            <li class="nav-item"><a class="nav-link active" href="projects.html" aria-current="page"><span data-es="Proyectos" data-en="Projects">Proyectos</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="skills.html"><span data-es="Habilidades" data-en="Skills">Habilidades</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="interests.html"><span data-es="Intereses" data-en="Interests">Intereses</span></a></li>
+        </ul></div>
+    </nav>
+    <main class="container-fluid p-0">
+        <section class="resume-section"><div class="resume-section-content">
+            <h2 class="mb-4" data-es="Proyectos" data-en="Projects">Proyectos</h2>
+            <div class="mb-4">
+                <h3 class="mb-1">BasketStat Tracker</h3>
+                <p class="mb-1" data-es="Aplicación móvil para registrar estadísticas en tiempo real durante partidos de baloncesto (Flutter & Firebase)." data-en="Mobile app for recording real-time statistics during basketball games (Flutter & Firebase).">Aplicación móvil para registrar estadísticas en tiempo real durante partidos de baloncesto (Flutter & Firebase).</p>
+            </div>
+            <div class="mb-4">
+                <h3 class="mb-1">ChefBook</h3>
+                <p class="mb-1" data-es="Plataforma web y móvil para organizar recetas personales, planificar menús semanales y generar listas de compras (React & Node.js)." data-en="Web and mobile platform for organizing personal recipes, planning weekly menus, and creating shopping lists (React & Node.js).">Plataforma web y móvil para organizar recetas personales, planificar menús semanales y generar listas de compras (React & Node.js).</p>
+            </div>
+            <div>
+                <h3 class="mb-1">Portfolio & Microservicios Open-Source</h3>
+                <p class="mb-0"><span data-es="Repositorio con proyectos personales y utilidades publicadas abiertamente en " data-en="Repository of personal projects and open-source utilities published on ">Repositorio con proyectos personales y utilidades publicadas abiertamente en </span><a href="https://github.com/diegomm1" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+            </div>
+        </div></section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
+</body>
+</html>
